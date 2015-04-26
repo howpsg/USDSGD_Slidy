@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DDP Presentation</title>
+  <meta charset="utf-8">
+  <meta name="description" content="DDP Presentation">
+  <meta name="author" content="Ho Wee Peng">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>DDP Presentation</h1>
+    <h2>Analysis of USD-SDG exchange rate for year 2009 to 2012</h2>
+    <p>Ho Wee Peng<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h1>Contents</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># load libraries and dataset
+library (stringr)
+library (ggplot2)
+library (forecast)
+setwd(&quot;C:/DevelopingDataProduct&quot;)
+exchange &lt;-  read.csv(&quot;USDSGD_STIIND.csv&quot;)
+exchange$year &lt;- str_sub(exchange$Date,1, 4)
+</code></pre>
+
+<ul>
+<li><p>Analysis of exchange rates: USD-SGD for year 2009 to 2012</p></li>
+<li><p>Is STI index influences the exchange rates for USD-SGD?</p></li>
+<li><p>Conclusion </p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h1>Analysis of exchange rates: USD-SGD for year 2009 to 2012</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot (exchange, aes(x=USDSGD1, y=STI.ind,colour=year)) + 
+          geom_point (shape=&quot;$&quot;, size=3) + geom_smooth (method=&quot;lm&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+<ul>
+<li>Use forecast to show the time series of 4 years USD-SDG exchange rates</li>
+</ul>
+
+<p>Following is the code for plot the exchange rate time series:</p>
+
+<pre><code class="r">timeserias &lt;- ts(exchange,start=c(2009), end =c(2012), frequency=365)
+plot (timeserias)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h1>Is STI index influences the exchange rates for USD-SGD?</h1>
+  </hgroup>
+  <article data-timings="">
+    <p>Run a Generalizaed Linear Model To check is STI index a influence fator for the exchange rates for USD-SGD.</p>
+
+<pre><code class="r">fit &lt;- lm(exchange$USDSGD1~exchange$STI.ind)
+summary(fit)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = exchange$USDSGD1 ~ exchange$STI.ind)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.16696 -0.03989  0.01034  0.04276  0.08897 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       1.752e+00  1.607e-02  109.04   &lt;2e-16 ***
+## exchange$STI.ind -6.292e-04  2.366e-05  -26.59   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.05508 on 804 degrees of freedom
+## Multiple R-squared:  0.468,  Adjusted R-squared:  0.4673 
+## F-statistic: 707.2 on 1 and 804 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h1>Conclusion</h1>
+  </hgroup>
+  <article data-timings="">
+    <p>From the Generalizaed Linear Model&#39;s result, it has shown that STI index is statistical significant for predicting the exchange rate for USD-SGD.</p>
+
+<pre><code class="r">Call: lm(formula = exchange$USDSGD1 ~ exchange$STI.ind)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.16696 -0.03989  0.01034  0.04276  0.08897 
+
+Coefficients:  
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)       1.752e+00  1.607e-02  109.04   &lt;2e-16 ***
+exchange$STI.ind -6.292e-04  2.366e-05  -26.59   &lt;2e-16 ***
+---
+Signif. codes:  0 ***   
+
+Residual standard error: 0.05508 on 804 degrees of freedom
+Multiple R-squared:  0.468, Adjusted R-squared:  0.4673 
+F-statistic: 707.2 on 1 and 804 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Contents'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Analysis of exchange rates: USD-SGD for year 2009 to 2012'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Is STI index influences the exchange rates for USD-SGD?'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Conclusion'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
